@@ -1,0 +1,75 @@
+---
+title: "practice"
+output:
+  html_document: default
+  word_document: default
+date: "2025-02-13"
+---
+```{r, include=FALSE}
+setwd("C:/Users/Student/Desktop/Biotech II")
+library(ggplot2)
+library(tidyverse)
+library(corrplot)
+data <- read.csv("ordered_data.csv")
+```
+
+## Summary of data obtained from an enzymatic hydrolysis of cellulose
+``` {r}
+
+
+summary(data)
+
+```
+## Plot distribution of the variables
+```{r, fig.cap="Scatter plot Enzymatic load vs Yield"}
+
+
+#Plot 1 Violin plot of enzymatic load
+ggplot(data, aes(as.factor(enzymatic_load), yield)) +
+  geom_violin() +
+  labs (x = "Enzymatic load (g/L)",
+        y = "Yield (ml/L)",
+        title = "Yield depending on Enzymatic Load") +
+  scale_fill_viridis_c() +
+  theme_minimal() 
+
+#Plot 2 violin plot of temperature
+ggplot(data, aes(as.factor(temperature), yield)) +
+  geom_violin() +
+  labs (x = "Temperature (Celsius)",
+        y = "Yield (ml/L)",
+        title = "Yield depending on Temperature") +
+  scale_fill_viridis_c() +
+  theme_minimal() 
+
+#Plot 3 violin plot of pH
+ggplot(data, aes(as.factor(pH), yield)) +
+  geom_violin() +
+  labs (x = "pH",
+        y = "Yield (ml/L)",
+        title = "Yield depending on enzymatic load and pH") +
+  scale_fill_viridis_c() +
+  theme_minimal() 
+
+
+```
+
+## Correlation between the data 
+```{r}
+#Plot 4 Correlation plot
+corrplot(cor(data))
+
+```
+
+## Statistical analysis of the data 
+```{r, include=FALSE}
+yield_aov <- aov(yield ~ enzymatic_load, data = data)
+temp_y <- aov(yield ~ temperature, data = data)
+ph_y <- aov(yield ~ pH, data = data)
+```
+
+```{r, echo=FALSE}
+summary.aov(yield_aov)
+summary.aov(temp_y)
+summary.aov(ph_y)
+```
